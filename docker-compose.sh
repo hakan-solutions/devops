@@ -1,25 +1,19 @@
 #!/bin/bash
 
-# install latest version of docker the lazy way
-curl -sSL https://get.docker.com | sh
+# Install packages to allow apt to use a repository over HTTPS:
+apt-get install apt-transport-https ca-certificates curl software-properties-common
 
-# make it so you don't need to sudo to run docker commands
-usermod -aG docker ubuntu
+# Add Docker’s official GPG keys
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
-# install docker-compose
-curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
+# Add the Docker repository to APT sources:
+add-apt-repository  "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs) stable"
 
-# copy the dockerfile into /srv/docker 
-# if you change this, change the systemd service file to match
-# WorkingDirectory=[whatever you have below]
-mkdir /srv/docker
-curl -o /srv/docker/docker-compose.yml https://raw.githubusercontent.com/mikegcoleman/todo/master/docker-compose.yml
+# Next, update the package database with the Docker packages from the newly added repo:
+apt-get update
 
-# copy in systemd unit file and register it so our compose file runs 
-# on system restart
-curl -o /etc/systemd/system/docker-compose-app.service https://raw.githubusercontent.com/mikegcoleman/todo/master/docker-compose-app.service
-systemctl enable docker-compose-app
+# Install the latest version of Docker CE
+apt-get -y install docker-ce
 
-# start up the application via docker-compose
-docker-compose -f /srv/docker/docker-compose.yml up -d
+# If you want to avoid typing sudo whenever you run the docker command, add your user to the docker group:
+sudo usermod -aG docker ${USER}
