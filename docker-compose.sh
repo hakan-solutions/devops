@@ -15,8 +15,8 @@ apt-get update
 # Install the latest version of Docker CE
 apt-get -y install docker-ce
 
-# If you want to avoid typing sudo whenever you run the docker command, add your user to the docker group:
-usermod -aG docker ${USER}
+# If you want to avoid typing sudo whenever you run the docker command, add your user to the docker group to default user: ubuntu
+usermod -aG docker ubuntu
 
 # Run this command to download the Docker Compose version 1.17:
 curl -L https://github.com/docker/compose/releases/download/1.17.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
