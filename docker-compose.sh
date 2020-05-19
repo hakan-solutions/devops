@@ -16,4 +16,4 @@ apt-get update
 apt-get -y install docker-ce
 
 # If you want to avoid typing sudo whenever you run the docker command, add your user to the docker group:
-sudo usermod -aG docker ${USER}
+usermod -aG docker ${USER}
